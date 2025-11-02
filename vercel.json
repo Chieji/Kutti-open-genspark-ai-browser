@@ -1,0 +1,20 @@
+{
+  "buildCommand": "npm run build",
+  "outputDirectory": ".next",
+  "framework": "nextjs",
+  "nodeVersion": "20.x",
+  "env": [
+    {
+      "key": "NEXT_PUBLIC_API_URL",
+      "value": "https://${VERCEL_PROJECT_PRODUCTION_URL}",
+      "type": "system"
+    }
+  ],
+  "functions": {
+    "app/**": {
+      "maxDuration": 60
+    }
+  },
+  "installCommand": "npm ci",
+  "ignoreCommand": "git diff --quiet HEAD~1 HEAD -- . ':!.env'"
+}
