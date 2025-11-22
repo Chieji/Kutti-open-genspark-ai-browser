@@ -3,7 +3,6 @@
 import { useState, useCallback, useEffect } from "react"
 import { useAuthStore } from "@/lib/auth-store"
 import { AuthPage } from "@/components/auth-page"
-import { BrowserHeader } from "@/components/browser-header"
 import { BrowserViewport } from "@/components/browser-viewport"
 import { DOMInspector } from "@/components/dom-inspector"
 import { AgentOutput } from "@/components/agent-output"
@@ -11,13 +10,17 @@ import { ScrapingOutput } from "@/components/scraping-output"
 import { ControlPanel } from "@/components/control-panel"
 import { SettingsPage } from "@/components/settings-page"
 import { ClaudeChat } from "@/components/claude-chat"
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
-import { MessageSquare, SettingsIcon, LogOut } from "lucide-react"
+import { Sidebar } from "@/components/sidebar"
+import { MCPStore } from "@/components/mcp-store"
+import { Autopilot } from "@/components/autopilot"
+import { WorkspaceHub } from "@/components/workspace-hub"
+import { AIDrive } from "@/components/ai-drive"
+import { LogOut } from "lucide-react"
 import { Button } from "@/components/ui/button"
 
 export default function Home() {
   const [agentRunning, setAgentRunning] = useState(false)
-  const [activeTab, setActiveTab] = useState("chat")
+  const [activeTab, setActiveTab] = useState("home")
   const [agentLogs, setAgentLogs] = useState<any[]>([])
   const [scrapingResults, setScrapingResults] = useState<any[]>([])
   const [isLoading, setIsLoading] = useState(true)
@@ -130,7 +133,7 @@ export default function Home() {
   }, [setUser, logout])
 
   if (isLoading) {
-    return <div className="flex items-center justify-center h-screen">Loading...</div>
+    return <div className="flex items-center justify-center h-screen bg-background text-foreground">Loading...</div>
   }
 
   if (!isAuthenticated) {
@@ -138,69 +141,68 @@ export default function Home() {
   }
 
   return (
-    <div className="flex flex-col h-screen bg-background text-foreground">
-      <BrowserHeader />
+    <div className="flex h-screen bg-black text-white overflow-hidden font-sans selection:bg-white/20">
+      {/* Sidebar Navigation */}
+      <Sidebar activeTab={activeTab} onTabChange={setActiveTab} />
 
-      <div className="flex justify-end px-4 py-2 border-b border-border/30">
-        <Button variant="ghost" size="sm" onClick={logout} className="text-muted-foreground hover:text-foreground">
-          <LogOut className="w-4 h-4 mr-2" />
-          Logout
-        </Button>
-      </div>
+      {/* Main Content Area */}
+      <div className="flex-1 flex flex-col min-w-0 bg-black relative">
+        {/* Content Viewport */}
+        <main className="flex-1 overflow-hidden relative">
+          {activeTab === "home" && <WorkspaceHub onNavigate={setActiveTab} />}
+          
+          {/* Tool Views */}
+          {activeTab !== "home" && (
+            <div className="h-full w-full flex flex-col animate-in fade-in zoom-in-95 duration-300">
+              {/* Tool Header */}
+              <header className="h-14 border-b border-white/10 flex items-center justify-between px-6 bg-black/50 backdrop-blur-xl sticky top-0 z-10">
+                <div className="flex items-center gap-2 text-sm text-muted-foreground">
+                  <Button variant="ghost" size="sm" onClick={() => setActiveTab("home")} className="hover:text-white -ml-2">
+                    Home
+                  </Button>
+                  <span>/</span>
+                  <span className="capitalize text-white">{activeTab.replace("-", " ")}</span>
+                </div>
+                <Button variant="ghost" size="sm" onClick={logout} className="text-muted-foreground hover:text-red-400 transition-colors">
+                  <LogOut className="w-4 h-4 mr-2" />
+                  Logout
+                </Button>
+              </header>
 
-      <div className="flex flex-1 overflow-hidden gap-4 p-4">
-        <div className="flex-1 flex flex-col gap-4">
-          <Tabs value={activeTab} onValueChange={setActiveTab} className="flex flex-col flex-1">
-            <TabsList className="grid w-full grid-cols-6">
-              <TabsTrigger value="chat" className="flex items-center gap-2">
-                <MessageSquare className="w-4 h-4" />
-                <span>Chat</span>
-              </TabsTrigger>
-              <TabsTrigger value="browser">Browser</TabsTrigger>
-              <TabsTrigger value="dom">DOM Inspector</TabsTrigger>
-              <TabsTrigger value="output">Agent Output</TabsTrigger>
-              <TabsTrigger value="scraping">Scraping Results</TabsTrigger>
-              <TabsTrigger value="settings" className="flex items-center gap-2">
-                <SettingsIcon className="w-4 h-4" />
-                <span>Settings</span>
-              </TabsTrigger>
-            </TabsList>
+              <div className="flex-1 overflow-hidden p-6">
+                <div className="h-full w-full max-w-[1600px] mx-auto flex gap-6">
+                  <div className="flex-1 h-full flex flex-col min-w-0 glass-card rounded-2xl overflow-hidden shadow-2xl border border-white/10 bg-[#121214]">
+                    {activeTab === "chat" && <ClaudeChat onSettingsClick={() => setActiveTab("settings")} />}
+                    {activeTab === "browser" && <BrowserViewport isActive={agentRunning} />}
+                    {activeTab === "autopilot" && <Autopilot />}
+                    {activeTab === "mcp" && <MCPStore />}
+                    {activeTab === "dom" && <DOMInspector />}
+                    {activeTab === "output" && <AgentOutput logs={agentLogs} />}
+                    {activeTab === "settings" && <SettingsPage />}
+                    {activeTab === "drive" && <AIDrive />}
+                    {/* Placeholders for new tools */}
+                    {(activeTab === "slides" || activeTab === "sheets" || activeTab === "docs") && (
+                      <div className="flex items-center justify-center h-full text-muted-foreground">
+                        Tool coming soon: {activeTab}
+                      </div>
+                    )}
+                  </div>
 
-            <TabsContent value="chat" className="flex-1 overflow-hidden">
-              <ClaudeChat onSettingsClick={() => setActiveTab("settings")} />
-            </TabsContent>
-
-            <TabsContent value="browser" className="flex-1 overflow-hidden">
-              <BrowserViewport isActive={agentRunning} />
-            </TabsContent>
-
-            <TabsContent value="dom" className="flex-1 overflow-hidden">
-              <DOMInspector />
-            </TabsContent>
-
-            <TabsContent value="output" className="flex-1 overflow-hidden">
-              <AgentOutput logs={agentLogs} />
-            </TabsContent>
-
-            <TabsContent value="scraping" className="flex-1 overflow-hidden">
-              <ScrapingOutput results={scrapingResults} />
-            </TabsContent>
-
-            <TabsContent value="settings" className="flex-1 overflow-hidden">
-              <SettingsPage />
-            </TabsContent>
-          </Tabs>
-        </div>
-
-        {(activeTab === "browser" || activeTab === "output" || activeTab === "scraping") && (
-          <div className="w-80">
-            <ControlPanel
-              agentRunning={agentRunning}
-              onToggleAgent={() => setAgentRunning(!agentRunning)}
-              onExecuteTask={handleAgentTask}
-            />
-          </div>
-        )}
+                  {/* Right Control Panel */}
+                  {(activeTab === "browser" || activeTab === "output" || activeTab === "scraping") && (
+                    <div className="w-80 flex-shrink-0">
+                      <ControlPanel
+                        agentRunning={agentRunning}
+                        onToggleAgent={() => setAgentRunning(!agentRunning)}
+                        onExecuteTask={handleAgentTask}
+                      />
+                    </div>
+                  )}
+                </div>
+              </div>
+            </div>
+          )}
+        </main>
       </div>
     </div>
   )
