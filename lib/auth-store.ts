@@ -14,6 +14,7 @@ export interface AuthState {
   token: string | null
   login: (email: string, password: string) => Promise<void>
   signup: (email: string, password: string, name: string) => Promise<void>
+  loginAsGuest: () => void
   logout: () => void
   setUser: (user: User | null) => void
   setToken: (token: string | null) => void
@@ -61,6 +62,15 @@ export const useAuthStore = create<AuthState>()(
         } finally {
           set({ isLoading: false })
         }
+      },
+
+      loginAsGuest: () => {
+        const guestUser: User = {
+          id: "guest-" + Date.now(),
+          email: "guest@genspark.ai",
+          name: "Guest User",
+        }
+        set({ user: guestUser, token: "guest-token", isAuthenticated: true })
       },
 
       logout: () => {

@@ -16,7 +16,7 @@ export function AuthPage() {
   const [name, setName] = useState("")
   const [error, setError] = useState("")
 
-  const { login, signup, isLoading } = useAuthStore()
+  const { login, signup, loginAsGuest, isLoading } = useAuthStore()
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
@@ -136,6 +136,24 @@ export function AuthPage() {
             }}
           >
             {isSignUp ? "Already have an account? Login" : "Don't have an account? Sign up"}
+          </Button>
+
+          <div className="relative">
+            <div className="absolute inset-0 flex items-center">
+              <div className="w-full border-t border-zinc-200 dark:border-zinc-700"></div>
+            </div>
+            <div className="relative flex justify-center text-xs uppercase">
+              <span className="px-2 bg-white dark:bg-zinc-900 text-zinc-600 dark:text-zinc-400">or try it out</span>
+            </div>
+          </div>
+
+          <Button
+            type="button"
+            variant="ghost"
+            className="w-full bg-zinc-100 dark:bg-zinc-800 text-zinc-900 dark:text-zinc-100 hover:bg-zinc-200 dark:hover:bg-zinc-700"
+            onClick={() => loginAsGuest()}
+          >
+            Continue as Guest (No Login)
           </Button>
         </CardContent>
       </Card>
