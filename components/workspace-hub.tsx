@@ -1,10 +1,12 @@
 "use client"
 
+import { useState } from "react"
 import { Omnibar } from "@/components/omnibar"
 import { Button } from "@/components/ui/button"
+import { Input } from "@/components/ui/input"
 import { 
   LayoutGrid, FileText, Image as ImageIcon, Video, Music, 
-  Code, Database, MessageSquare, Sparkles, Box, HardDrive 
+  Code, Database, MessageSquare, Sparkles, Box, HardDrive, Search 
 } from "lucide-react"
 import { cn } from "@/lib/utils"
 
@@ -13,6 +15,8 @@ interface WorkspaceHubProps {
 }
 
 export function WorkspaceHub({ onNavigate }: WorkspaceHubProps) {
+  const [searchQuery, setSearchQuery] = useState("")
+
   const tools = [
     { id: "autopilot", label: "Custom Super Agent", icon: Sparkles, color: "text-purple-400", badge: "New" },
     { id: "slides", label: "AI Slides", icon: LayoutGrid, color: "text-orange-400" },
@@ -26,6 +30,10 @@ export function WorkspaceHub({ onNavigate }: WorkspaceHubProps) {
     { id: "mcp", label: "All Agents", icon: Box, color: "text-white" },
   ]
 
+  const filteredTools = tools.filter(tool => 
+    tool.label.toLowerCase().includes(searchQuery.toLowerCase())
+  )
+
   return (
     <div className="flex-1 h-full flex flex-col items-center justify-center p-8 relative overflow-hidden">
       {/* Background Ambient Glow */}
@@ -33,19 +41,33 @@ export function WorkspaceHub({ onNavigate }: WorkspaceHubProps) {
 
       <div className="w-full max-w-5xl space-y-16 relative z-10">
         {/* Header */}
-        <div className="text-center space-y-2">
-          <h1 className="text-4xl font-bold tracking-tight text-white">
+        <div className="text-center space-y-4">
+          <h1 className="text-5xl font-bold tracking-tight text-white animate-in fade-in slide-in-from-bottom-4 duration-1000">
             Genspark AI Workspace
             <span className="inline-block ml-2 w-2 h-2 bg-white rounded-full animate-pulse" />
           </h1>
+          <p className="text-muted-foreground text-lg animate-in fade-in slide-in-from-bottom-4 duration-1000 delay-100">
+            Your all-in-one AGI workspace
+          </p>
         </div>
 
         {/* Omnibar */}
         <Omnibar onSearch={(q) => console.log(q)} />
 
+        {/* Search Tools */}
+        <div className="relative max-w-md mx-auto animate-in fade-in slide-in-from-bottom-4 duration-1000 delay-200">
+          <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+          <Input 
+            placeholder="Search tools..." 
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)}
+            className="pl-10 bg-white/5 border-white/10 h-12"
+          />
+        </div>
+
         {/* Tools Grid */}
-        <div className="flex flex-wrap justify-center gap-6 max-w-4xl mx-auto">
-          {tools.map((tool) => (
+        <div className="flex flex-wrap justify-center gap-6 max-w-4xl mx-auto animate-in fade-in slide-in-from-bottom-4 duration-1000 delay-300">
+          {filteredTools.map((tool) => (
             <button
               key={tool.id}
               onClick={() => onNavigate(tool.id)}

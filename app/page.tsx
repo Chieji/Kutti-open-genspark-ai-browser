@@ -15,6 +15,10 @@ import { MCPStore } from "@/components/mcp-store"
 import { Autopilot } from "@/components/autopilot"
 import { WorkspaceHub } from "@/components/workspace-hub"
 import { AIDrive } from "@/components/ai-drive"
+import { CommandPalette } from "@/components/command-palette"
+import { UserMenu } from "@/components/user-menu"
+import { LoadingScreen } from "@/components/loading-screen"
+import { toast } from "@/components/ui/toast"
 import { LogOut } from "lucide-react"
 import { Button } from "@/components/ui/button"
 
@@ -24,8 +28,9 @@ export default function Home() {
   const [agentLogs, setAgentLogs] = useState<any[]>([])
   const [scrapingResults, setScrapingResults] = useState<any[]>([])
   const [isLoading, setIsLoading] = useState(true)
+  const [commandPaletteOpen, setCommandPaletteOpen] = useState(false)
 
-  const { isAuthenticated, setUser, logout } = useAuthStore()
+  const { isAuthenticated, setUser, logout, user } = useAuthStore()
 
   const handleAgentTask = useCallback(async (task: string, url: string) => {
     setAgentRunning(true)
@@ -132,8 +137,20 @@ export default function Home() {
     }
   }, [setUser, logout])
 
+  // Keyboard shortcuts
+  useEffect(() => {
+    const down = (e: KeyboardEvent) => {
+      if (e.key === "k" && (e.metaKey || e.ctrlKey)) {
+        e.preventDefault()
+        setCommandPaletteOpen((open) => !open)
+      }
+    }
+    document.addEventListener("keydown", down)
+    return () => document.removeEventListener("keydown", down)
+  }, [])
+
   if (isLoading) {
-    return <div className="flex items-center justify-center h-screen bg-background text-foreground">Loading...</div>
+    return <LoadingScreen />
   }
 
   if (!isAuthenticated) {
@@ -142,6 +159,13 @@ export default function Home() {
 
   return (
     <div className="flex h-screen bg-black text-white overflow-hidden font-sans selection:bg-white/20">
+      {/* Command Palette */}
+      <CommandPalette 
+        open={commandPaletteOpen} 
+        onOpenChange={setCommandPaletteOpen} 
+        onNavigate={setActiveTab} 
+      />
+
       {/* Sidebar Navigation */}
       <Sidebar activeTab={activeTab} onTabChange={setActiveTab} />
 
@@ -163,10 +187,17 @@ export default function Home() {
                   <span>/</span>
                   <span className="capitalize text-white">{activeTab.replace("-", " ")}</span>
                 </div>
-                <Button variant="ghost" size="sm" onClick={logout} className="text-muted-foreground hover:text-red-400 transition-colors">
-                  <LogOut className="w-4 h-4 mr-2" />
-                  Logout
-                </Button>
+                <div className="flex items-center gap-2">
+                  <Button 
+                    variant="outline" 
+                    size="sm" 
+                    onClick={() => setCommandPaletteOpen(true)}
+                    className="gap-2 border-white/10 hover:bg-white/5"
+                  >
+                    <span className="text-xs text-muted-foreground">⌘K</span>
+                  </Button>
+                  <UserMenu user={user} onLogout={logout} onSettings={() => setActiveTab("settings")} />
+                </div>
               </header>
 
               <div className="flex-1 overflow-hidden p-6">
