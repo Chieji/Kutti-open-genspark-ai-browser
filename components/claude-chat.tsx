@@ -210,7 +210,7 @@ export function ClaudeChat({ onSettingsClick }: ClaudeChatProps) {
                )}
              >
                <Cpu className="w-3 h-3" />
-               Local
+               Free
              </button>
            </div>
         </div>
@@ -218,14 +218,13 @@ export function ClaudeChat({ onSettingsClick }: ClaudeChatProps) {
            {/* Optional header content */}
         </div>
       </div>
-
       {/* Messages Area */}
       <div className="flex-1 overflow-y-auto p-4 md:p-8 scroll-smooth">
         <div className="max-w-3xl mx-auto space-y-8 pb-32">
           {modelLoading && (
             <div className="flex flex-col items-center justify-center py-10 space-y-4 animate-in fade-in">
               <div className="w-12 h-12 rounded-full border-4 border-white/10 border-t-green-500 animate-spin" />
-              <p className="text-sm text-muted-foreground font-medium">Loading AI Model to Device...</p>
+              <p className="text-sm text-muted-foreground font-medium">Connecting to Free AI Model...</p>
               <p className="text-xs text-muted-foreground/50 font-mono">{modelProgress}</p>
             </div>
           )}
@@ -238,11 +237,11 @@ export function ClaudeChat({ onSettingsClick }: ClaudeChatProps) {
               
               <div className="space-y-2 max-w-lg">
                 <h3 className="text-3xl font-bold tracking-tight text-foreground">
-                  {useLocalModel ? "Local AI Ready" : "How can I help you today?"}
+                  {useLocalModel ? "Free AI Ready" : "How can I help you today?"}
                 </h3>
                 <p className="text-muted-foreground text-lg">
                   {useLocalModel 
-                    ? "Running completely offline on your device. Private and free." 
+                    ? "Powered by Llama 2 via HuggingFace. Completely free!" 
                     : "I can browse the web, analyze data, and help you find answers."}
                 </p>
               </div>

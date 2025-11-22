@@ -1,54 +1,27 @@
-import { CreateMLCEngine, MLCEngine } from "@mlc-ai/web-llm";
-
-// Use a small, fast model for local inference
-const SELECTED_MODEL = "Llama-3-8B-Instruct-q4f32_1-MLC";
-
-let engine: MLCEngine | null = null;
+// Stub for local model - replaced with Hugging Face free tier
+// This prevents build errors while maintaining the interface
 
 export interface LocalModelConfig {
-  onProgress?: (progress: string) => void;
+  onProgress?: (progress: string) => void
 }
 
-export async function initLocalModel(config?: LocalModelConfig) {
-  if (engine) return engine;
-
-  try {
-    engine = await CreateMLCEngine(SELECTED_MODEL, {
-      initProgressCallback: (report) => {
-        if (config?.onProgress) {
-          config.onProgress(report.text);
-        }
-        console.log("[Local Model]", report.text);
-      },
-    });
-    return engine;
-  } catch (error) {
-    console.error("Failed to initialize local model:", error);
-    throw error;
+export async function initLocalModel(config?: LocalModelConfig): Promise<void> {
+  // Stub - actual free model runs via /api/chat/free endpoint
+  console.log("Local model stub initialized - using HuggingFace free tier instead")
+  if (config?.onProgress) {
+    config.onProgress("Connecting to free model...")
   }
 }
 
 export async function generateLocalResponse(
   messages: { role: "user" | "assistant" | "system"; content: string }[],
   onUpdate?: (text: string) => void
-) {
-  if (!engine) {
-    throw new Error("Model not initialized. Call initLocalModel first.");
+): Promise<string> {
+  // This function is replaced by the /api/chat/free endpoint
+  // Keeping stub to prevent build errors
+  const response = "Please use the Cloud/Free toggle to access the free model."
+  if (onUpdate) {
+    onUpdate(response)
   }
-
-  const chunks = await engine.chat.completions.create({
-    messages,
-    stream: true,
-  });
-
-  let fullResponse = "";
-  for await (const chunk of chunks) {
-    const content = chunk.choices[0]?.delta?.content || "";
-    fullResponse += content;
-    if (onUpdate) {
-      onUpdate(fullResponse);
-    }
-  }
-
-  return fullResponse;
+  return response
 }
