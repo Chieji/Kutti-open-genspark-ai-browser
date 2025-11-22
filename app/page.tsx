@@ -18,6 +18,8 @@ import { AIDrive } from "@/components/ai-drive"
 import { CommandPalette } from "@/components/command-palette"
 import { UserMenu } from "@/components/user-menu"
 import { LoadingScreen } from "@/components/loading-screen"
+import { QuickActions } from "@/components/quick-actions"
+import { ErrorBoundary } from "@/components/error-boundary"
 import { toast } from "@/components/ui/toast"
 import { LogOut } from "lucide-react"
 import { Button } from "@/components/ui/button"
@@ -158,7 +160,8 @@ export default function Home() {
   }
 
   return (
-    <div className="flex h-screen bg-black text-white overflow-hidden font-sans selection:bg-white/20">
+    <ErrorBoundary>
+      <div className="flex h-screen bg-black text-white overflow-hidden font-sans selection:bg-white/20">
       {/* Command Palette */}
       <CommandPalette 
         open={commandPaletteOpen} 
@@ -235,6 +238,10 @@ export default function Home() {
           )}
         </main>
       </div>
+      
+      {/* Quick Actions FAB */}
+      <QuickActions onNavigate={setActiveTab} />
     </div>
+    </ErrorBoundary>
   )
 }
