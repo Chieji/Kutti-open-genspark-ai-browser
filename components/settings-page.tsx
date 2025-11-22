@@ -23,25 +23,29 @@ export function SettingsPage() {
 
       {/* Settings Tabs */}
       <div className="flex-1 overflow-hidden flex flex-col">
-        <Tabs value={activeTab} onValueChange={setActiveTab} className="flex-1 flex flex-col px-6 pt-6">
-          <TabsList className="grid w-full max-w-md grid-cols-2 mb-6 bg-muted/40 border border-border/50 p-1">
-            <TabsTrigger value="connectors" className="data-[state=active]:bg-background flex items-center gap-2">
-              <Zap className="w-4 h-4" />
-              <span>Connectors</span>
-            </TabsTrigger>
-            <TabsTrigger value="api-keys" className="data-[state=active]:bg-background flex items-center gap-2">
-              <Key className="w-4 h-4" />
-              <span>API Keys</span>
-            </TabsTrigger>
-          </TabsList>
+        <Tabs value={activeTab} onValueChange={setActiveTab} className="flex-1 flex flex-col h-full">
+          <div className="px-6 pt-6 flex-none">
+            <TabsList className="grid w-full max-w-md grid-cols-2 mb-6 bg-zinc-900 border border-zinc-800 p-1">
+              <TabsTrigger value="connectors" className="data-[state=active]:bg-zinc-800 data-[state=active]:text-white flex items-center gap-2">
+                <Zap className="w-4 h-4" />
+                <span>Connectors</span>
+              </TabsTrigger>
+              <TabsTrigger value="api-keys" className="data-[state=active]:bg-zinc-800 data-[state=active]:text-white flex items-center gap-2">
+                <Key className="w-4 h-4" />
+                <span>API Keys</span>
+              </TabsTrigger>
+            </TabsList>
+          </div>
 
-          <TabsContent value="connectors" className="flex-1 overflow-auto mt-0 pb-6">
-            <SettingsConnectors />
-          </TabsContent>
+          <div className="flex-1 overflow-y-auto px-6 pb-6 min-h-0">
+            <TabsContent value="connectors" className="mt-0 h-full">
+              <SettingsConnectors />
+            </TabsContent>
 
-          <TabsContent value="api-keys" className="flex-1 overflow-auto mt-0 pb-6">
-            <SettingsApiKeys />
-          </TabsContent>
+            <TabsContent value="api-keys" className="mt-0 h-full">
+              <SettingsApiKeys />
+            </TabsContent>
+          </div>
         </Tabs>
       </div>
     </div>

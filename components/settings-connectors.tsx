@@ -19,15 +19,15 @@ export function SettingsConnectors() {
   const renderConnectorCard = (connector: any) => (
     <Card
       key={connector.id}
-      className="p-4 bg-muted/40 border border-border/50 hover:border-border transition-all duration-200 flex items-center justify-between group"
+      className="p-4 bg-zinc-900/50 border border-zinc-800 hover:border-zinc-700 transition-all duration-200 flex items-center justify-between group"
     >
       <div className="flex items-center gap-4 flex-1">
-        <div className="w-12 h-12 rounded-lg bg-muted/60 flex items-center justify-center text-2xl border border-border/50">
+        <div className="w-12 h-12 rounded-lg bg-zinc-800 flex items-center justify-center text-2xl border border-zinc-700">
           {connector.icon}
         </div>
         <div className="flex-1 min-w-0">
-          <h3 className="font-semibold text-foreground text-sm">{connector.name}</h3>
-          <p className="text-xs text-muted-foreground line-clamp-2">{connector.description}</p>
+          <h3 className="font-semibold text-zinc-100 text-sm">{connector.name}</h3>
+          <p className="text-xs text-zinc-400 line-clamp-2">{connector.description}</p>
         </div>
       </div>
 
@@ -35,22 +35,22 @@ export function SettingsConnectors() {
         {connector.connected ? (
           <div className="flex items-center gap-3">
             <div className="flex items-center gap-2">
-              <div className="w-2 h-2 rounded-full bg-green-500" />
-              <span className="text-xs text-muted-foreground">Connected</span>
+              <div className="w-2 h-2 rounded-full bg-white shadow-[0_0_8px_rgba(255,255,255,0.5)]" />
+              <span className="text-xs text-zinc-300">Connected</span>
             </div>
             <button
               onClick={() => toggleConnector(connector.id)}
-              className="w-11 h-6 bg-blue-600 rounded-full relative transition-colors hover:bg-blue-700"
+              className="w-11 h-6 bg-zinc-100 rounded-full relative transition-colors hover:bg-white"
             >
-              <div className="absolute right-1 top-1/2 -translate-y-1/2 w-4 h-4 bg-white rounded-full" />
+              <div className="absolute right-1 top-1/2 -translate-y-1/2 w-4 h-4 bg-black rounded-full" />
             </button>
           </div>
         ) : (
           <button
             onClick={() => toggleConnector(connector.id)}
-            className="w-11 h-6 bg-muted/60 rounded-full relative transition-colors hover:bg-muted/80 border border-border/50"
+            className="w-11 h-6 bg-zinc-800 rounded-full relative transition-colors hover:bg-zinc-700 border border-zinc-700"
           >
-            <div className="absolute left-1 top-1/2 -translate-y-1/2 w-4 h-4 bg-muted-foreground/30 rounded-full" />
+            <div className="absolute left-1 top-1/2 -translate-y-1/2 w-4 h-4 bg-zinc-500 rounded-full" />
           </button>
         )}
       </div>

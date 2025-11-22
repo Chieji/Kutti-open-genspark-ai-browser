@@ -148,54 +148,27 @@
   .glass-card {
     @apply bg-card/40 backdrop-blur-md border border-white/5 shadow-xl;
   }
-  
-  .glow-text {
-    text-shadow: 0 0 20px rgba(255, 255, 255, 0.3);
+
+  /* Professional Monochrome Utilities */
+  .bg-zinc-gradient {
+    background: linear-gradient(to bottom right, var(--zinc-900), var(--black));
   }
   
-  /* Premium Gradients */
-  .bg-gradient-radial {
-    background: radial-gradient(circle at center, var(--tw-gradient-stops));
+  .glass-panel {
+    @apply bg-zinc-900/50 backdrop-blur-xl border border-white/10;
   }
   
-  .bg-gradient-conic {
-    background: conic-gradient(from 180deg at 50% 50%, var(--tw-gradient-stops));
+  .glass-panel-hover {
+    @apply hover:bg-zinc-800/50 hover:border-white/20 transition-all duration-300;
   }
-  
-  .gradient-text {
-    @apply bg-gradient-to-r from-blue-400 via-purple-400 to-pink-400 bg-clip-text text-transparent;
-  }
-  
-  .gradient-border {
-    position: relative;
-    background: var(--card);
-    border-radius: inherit;
-  }
-  
-  .gradient-border::before {
-    content: '';
-    position: absolute;
-    inset: 0;
-    border-radius: inherit;
-    padding: 1px;
-    background: linear-gradient(135deg, rgba(99, 102, 241, 0.5), rgba(168, 85, 247, 0.5), rgba(236, 72, 153, 0.5));
-    -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
-    -webkit-mask-composite: xor;
-    mask-composite: exclude;
-    pointer-events: none;
+
+  .text-gradient-subtle {
+    @apply bg-clip-text text-transparent bg-gradient-to-r from-white via-zinc-200 to-zinc-400;
   }
   
   /* Advanced Hover Effects */
   .hover-lift {
     @apply transition-all duration-300 hover:-translate-y-1 hover:shadow-2xl;
-  }
-  
-  .hover-glow {
-    @apply transition-all duration-300;
-  }
-  
-  .hover-glow:hover {
-    box-shadow: 0 0 30px rgba(99, 102, 241, 0.4), 0 0 60px rgba(168, 85, 247, 0.2);
   }
   
   /* Spotlight Effect */
